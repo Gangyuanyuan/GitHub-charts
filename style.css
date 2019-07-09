@@ -1,0 +1,74 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+a{
+	text-decoration: none;
+	color: #333;
+}
+/*html,body{
+	height: 100%;
+}*/
+body{
+  font-size: 14px;
+  line-height: 1.2;
+  background: #fff;
+}
+main{
+  height: calc(100vh - 50px);
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch; /* ios 上增加弹性 */
+}
+main > section{
+	display: none;
+}
+main > section:first-child{
+	display: block;
+}
+.item{
+	border-bottom: 1px solid #ccc;
+	padding: 12px 10px;
+	display: flex;
+}
+.item > a{
+	display: flex;
+}
+.item .order{
+	display: flex;
+	align-items: center; 
+}
+.item .order > span{
+	padding: 0 4px;
+	color: #fff;
+	background: green;
+}
+.item .detail{
+	padding-left: 10px;
+}
+.item .detail h2{
+	font-size: 18px;
+}
+.item .detail .extra{
+	color: #999;
+	margin-top: 4px;
+}
+.item .extra span{
+	color: #FF5722;
+}
+footer{
+  height: 50px;
+  display: flex;
+  border-top: 1px solid #ccc;
+}
+footer > div{
+  flex: 1;
+  text-align: center;
+}
+footer .active{
+  color: #FF5722;
+}
+footer > div > span{
+  display: block;
+  padding-top: 5px;
+}
