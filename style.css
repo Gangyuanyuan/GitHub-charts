@@ -22,6 +22,7 @@ main{
 }
 main > section{
 	display: none;
+	margin-top: 4px;
 }
 main > section:first-child{
 	display: block;
@@ -52,10 +53,23 @@ main > section:first-child{
 .item .detail .description,
 .item .detail .extra{
 	color: #999;
-	margin-top: 4px;
+	margin-top: 5px;
 }
 .item .extra .star-count{
 	color: #FF5722;
+}
+.loading{
+	padding: 10px;
+	text-align: center;
+	display: none;
+}
+.loading .iconfont{
+	display: inline-block;
+	animation: 1s rotate linear infinite; /*线性 无休止旋转*/
+}
+@keyframes rotate{
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
 }
 footer{
   height: 50px;

@@ -6,16 +6,27 @@ $('footer>div').click(function(){
 
 var page = 1
 var count = 0
+var isLoadig = false
 
 start()
+
+var clock
 $('main').scroll(function(){
-	if($('section').eq(0).height() -10 <= $('main').height() + $('main').scrollTop()){
-		start()
+	if(clock){
+		window.clearTimeout(clock) // 定时器节流
 	}
+	clock = setTimeout(function(){
+		if($('section').eq(0).height() -10 <= $('main').height() + $('main').scrollTop()){
+			start()
+		}
+	}, 300)
 })
 
 // 获取并设置数据
 function start(){
+	if(isLoadig) return // 避免多次重复请求
+	isLoadig = true
+	$('.loading').show()
 	$.ajax({
 		url: 'https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc&page='+page,
 		type: 'GET',
@@ -30,6 +41,9 @@ function start(){
 		count += 30
 	}).fail(function(){
 		console.log('error')
+	}).always(function(){
+		isLoadig = false
+		$('.loading').hide()
 	})
 }
 
@@ -52,11 +66,10 @@ function setData(data){
     $node.find('.detail h2').text(item.name)  
     $node.find('.detail .description').text(item.description) 
     $node.find('.detail .star-count').text(item.stargazers_count)
-		$('section').eq(0).append($node)
+		$('#repo-board').append($node)
 	})
 }
-
-// 拼接字符串写法
+// 字符串拼接写法
 // function setData(data){
 // 	var arr = data.data.items
 // 	console.log("参数数组:", arr)
