@@ -28,7 +28,7 @@ main > section:first-child{
 }
 .item{
 	border-bottom: 1px solid #ccc;
-	padding: 12px 10px;
+	padding: 12px 12px;
 	display: flex;
 }
 .item > a{
@@ -44,16 +44,17 @@ main > section:first-child{
 	background: green;
 }
 .item .detail{
-	padding-left: 10px;
+	padding-left: 12px;
 }
 .item .detail h2{
 	font-size: 18px;
 }
+.item .detail .description,
 .item .detail .extra{
 	color: #999;
 	margin-top: 4px;
 }
-.item .extra span{
+.item .extra .star-count{
 	color: #FF5722;
 }
 footer{
