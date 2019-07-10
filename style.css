@@ -32,6 +32,11 @@ main > section:first-child{
 	padding: 12px 12px;
 	display: flex;
 }
+.item .cover,
+.item .cover img{
+  width: 50px;
+  border-radius: 4px;
+}
 .item > a{
 	display: flex;
 }
@@ -53,7 +58,7 @@ main > section:first-child{
 .item .detail .description,
 .item .detail .extra{
 	color: #999;
-	margin-top: 5px;
+	margin-top: 6px;
 }
 .item .extra .star-count{
 	color: #FF5722;

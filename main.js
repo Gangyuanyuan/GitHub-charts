@@ -4,11 +4,14 @@ $('footer>div').click(function(){
 	$(this).addClass('active').siblings().removeClass('active')
 })
 
-var page = 1
+var page1 = 1
+var page2 = 1
 var count = 0
-var isLoadig = false
+var isLoadig1 = false
+var isLoadig2 = false
 
-start()
+startRepos()
+startUsers()
 
 var clock
 $('main').scroll(function(){
@@ -16,38 +19,42 @@ $('main').scroll(function(){
 		window.clearTimeout(clock) // 定时器节流
 	}
 	clock = setTimeout(function(){
-		if($('section').eq(0).height() -10 <= $('main').height() + $('main').scrollTop()){
-			start()
+		if($('#repos .container').height() -30 <= $('main').height() + $('main').scrollTop()){
+			startRepos()
+			startUsers()
 		}
 	}, 300)
 })
 
-// 获取并设置数据
-function start(){
-	if(isLoadig) return // 避免多次重复请求
-	isLoadig = true
-	$('.loading').show()
+
+
+// repos 页面获取并设置数据
+function startRepos(){
+	if(isLoadig1){
+		return     // 避免多次重复请求
+	} 
+	isLoadig1 = true
+	$('#repos .loading').show()
 	$.ajax({
-		url: 'https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc&page='+page,
+		url: 'https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc&page='+page1,
 		type: 'GET',
 		data: {
 			page: this.page,
 		},
 		dataType: 'jsonp'
 	}).done(function(ret){
-		console.log(ret)
-		setData(ret)
-		page += 1
+		console.log('repos:', ret)
+		setReposData(ret)
+		page1 += 1
 		count += 30
 	}).fail(function(){
 		console.log('error')
 	}).always(function(){
-		isLoadig = false
-		$('.loading').hide()
+		isLoadig1 = false
+		$('#repos .loading').hide()
 	})
 }
-
-function setData(data){
+function setReposData(data){
 	var arr = data.data.items
 	arr.forEach(function(item, index){
 		var tpl = `<div class="item">
@@ -66,19 +73,52 @@ function setData(data){
     $node.find('.detail h2').text(item.name)  
     $node.find('.detail .description').text(item.description) 
     $node.find('.detail .star-count').text(item.stargazers_count)
-		$('#repo-board').append($node)
+		$('#repos .container').append($node)
 	})
 }
-// 字符串拼接写法
-// function setData(data){
-// 	var arr = data.data.items
-// 	console.log("参数数组:", arr)
-// 	var tpl = ''
-// 	for(var i=0; i<arr.length; i++){
-// 		tpl += '<div class="item"><a href="'+arr[i].html_url+'"><div class="order"><span>'+(i+1)+'</span>'
-// 		tpl += '</div><div class="detail">'
-// 		tpl += '<h2>'+arr[i].name+'</h2><div class="description">'+arr[i].description+'</div><div class="extra"><span class="star-count">'+arr[i].stargazers_count+'</span>&nbsp;&nbsp;star</div>'
-// 		tpl += '</div></a></div>'
-// 	}
-// 	$('section').eq(0).html(tpl)
-// }
+
+
+// users 页面获取并设置数据
+function startUsers(){
+	if(isLoadig2){
+		return     // 避免多次重复请求
+	} 
+	isLoadig2 = true
+	$('#users .loading').show()
+	$.ajax({
+		url: 'https://api.github.com/search/users?q=followers:>1000+location:china+language:javascript&page='+page2,
+		type: 'GET',
+		data: {
+			page: this.page,
+		},
+		dataType: 'jsonp'
+	}).done(function(ret){
+		console.log('users:', ret)
+		setUsersData(ret)
+		page2 += 1
+	}).fail(function(){
+		console.log('error')
+	}).always(function(){
+		isLoadig2 = false
+		$('#users .loading').hide()
+	})
+}
+
+function setUsersData(data){
+	var arr = data.data.items
+	arr.forEach(function(item, index){
+		var $node = $(`<div class="item">
+          <a href="#">
+            <div class="cover"><img src="" alt=""></div>
+            <div class="detail">
+            	<h2>ruanyf </h2>
+            	<div class="extra"><span class="nationality">China</span></div>
+            </div>
+          </a>
+        </div> `)
+		$node.find('.cover img').attr('src', item.avatar_url)
+    $node.find('a').attr('href', item.html_url)    
+    $node.find('.detail h2').text(item.login) 
+		$('#users .container').append($node)
+	})
+}
