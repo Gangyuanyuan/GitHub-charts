@@ -4,23 +4,37 @@ $('footer>div').click(function(){
 	$(this).addClass('active').siblings().removeClass('active')
 })
 
-$.ajax({
-	url: 'https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc',
-	type: 'GET',
-	data: {
-		page: this.page
-	},
-	dataType: 'jsonp'
-}).done(function(ret){
-	console.log(ret)
-	setData(ret)
-}).fail(function(){
-	console.log('error')
+var page = 1
+var count = 0
+
+start()
+$('main').scroll(function(){
+	if($('section').eq(0).height() -10 <= $('main').height() + $('main').scrollTop()){
+		start()
+	}
 })
+
+// 获取并设置数据
+function start(){
+	$.ajax({
+		url: 'https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc&page='+page,
+		type: 'GET',
+		data: {
+			page: this.page,
+		},
+		dataType: 'jsonp'
+	}).done(function(ret){
+		console.log(ret)
+		setData(ret)
+		page += 1
+		count += 30
+	}).fail(function(){
+		console.log('error')
+	})
+}
 
 function setData(data){
 	var arr = data.data.items
-	console.log(arr)
 	arr.forEach(function(item, index){
 		var tpl = `<div class="item">
 		 	<a href="https://github.com/TryGhost/Ghost">
@@ -33,7 +47,7 @@ function setData(data){
 		 	</a>
 		 </div>`
 		var $node = $(tpl)
-		$node.find('.order span').text(index+1)
+		$node.find('.order span').text(index+1+count)
 		$node.find('a').attr('href', item.html_url)    
     $node.find('.detail h2').text(item.name)  
     $node.find('.detail .description').text(item.description) 
