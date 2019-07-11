@@ -2,6 +2,18 @@ $('footer>div').click(function(){
 	var index = $(this).index()
 	$('section').hide().eq(index).fadeIn()
 	$(this).addClass('active').siblings().removeClass('active')
+	// $('main').scrollTop(0) // 切换返回顶部
+	if(index == 0){
+		if($('#repos .container').html() == ""){
+			startRepos()
+		}
+	}else if(index == 1){
+		if($('#users .container').html() == ""){
+			startUsers()
+		}
+	}else{
+
+	}
 })
 
 var page1 = 1
@@ -11,7 +23,6 @@ var isLoadig1 = false
 var isLoadig2 = false
 
 startRepos()
-startUsers()
 
 var clock
 $('main').scroll(function(){
@@ -19,13 +30,17 @@ $('main').scroll(function(){
 		window.clearTimeout(clock) // 定时器节流
 	}
 	clock = setTimeout(function(){
-		if($('#repos .container').height() -30 <= $('main').height() + $('main').scrollTop()){
-			startRepos()
-			startUsers()
+		if($('footer>div').eq(0).hasClass('active')){
+			if($('#repos').height() -30 <= $('main').height() + $('main').scrollTop()){
+				startRepos()
+			}
+		}else if($('footer>div').eq(1).hasClass('active')){
+			if($('#users').height() -30 <= $('main').height() + $('main').scrollTop()){
+				startUsers()
+			}
 		}
 	}, 300)
 })
-
 
 
 // repos 页面获取并设置数据
@@ -77,7 +92,6 @@ function setReposData(data){
 	})
 }
 
-
 // users 页面获取并设置数据
 function startUsers(){
 	if(isLoadig2){
@@ -98,12 +112,11 @@ function startUsers(){
 		page2 += 1
 	}).fail(function(){
 		console.log('error')
-	}).always(function(){
+	}).always(function(ret){
 		isLoadig2 = false
 		$('#users .loading').hide()
 	})
 }
-
 function setUsersData(data){
 	var arr = data.data.items
 	arr.forEach(function(item, index){
