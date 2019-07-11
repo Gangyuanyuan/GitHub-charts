@@ -21,6 +21,8 @@ var page2 = 1
 var count = 0
 var isLoadig1 = false
 var isLoadig2 = false
+var isEnding1 = false
+var isEnding2 = false
 
 startRepos()
 
@@ -45,30 +47,37 @@ $('main').scroll(function(){
 
 // repos 页面获取并设置数据
 function startRepos(){
-	if(isLoadig1){
-		return     // 避免多次重复请求
-	} 
-	isLoadig1 = true
-	$('#repos .loading').show()
-	$.ajax({
-		url: 'https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc&page='+page1,
-		type: 'GET',
-		data: {
-			page: this.page,
-		},
-		dataType: 'jsonp'
-	}).done(function(ret){
-		console.log('repos:', ret)
-		setReposData(ret)
-		page1 += 1
-		count += 30
-	}).fail(function(){
-		console.log('error')
-	}).always(function(){
-		isLoadig1 = false
-		$('#repos .loading').hide()
-	})
-}
+	if(!isEnding1){
+		if(isLoadig1){
+			return     // 避免多次重复请求
+		} 
+		isLoadig1 = true
+		$('#repos .loading').show()
+		$.ajax({
+			url: 'https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc&page='+page1,
+			type: 'GET',
+			data: {
+				page: this.page,
+			},
+			dataType: 'jsonp'
+		}).done(function(ret){
+			console.log('repos:', ret)
+			setReposData(ret)
+			page1 += 1
+			count += 30
+		}).fail(function(){
+			console.log('error')
+		}).always(function(ret){
+			isLoadig1 = false
+			$('#repos .loading').hide()
+			var arr = ret.data.items
+			if(arr.length === 0){  // 所有数据获取完毕
+				isEnding1 = true
+				$('#repos .ending').show()
+			}
+		})
+	}
+}	
 function setReposData(data){
 	var arr = data.data.items
 	arr.forEach(function(item, index){
@@ -94,28 +103,35 @@ function setReposData(data){
 
 // users 页面获取并设置数据
 function startUsers(){
-	if(isLoadig2){
-		return     // 避免多次重复请求
-	} 
-	isLoadig2 = true
-	$('#users .loading').show()
-	$.ajax({
-		url: 'https://api.github.com/search/users?q=followers:>1000+location:china+language:javascript&page='+page2,
-		type: 'GET',
-		data: {
-			page: this.page,
-		},
-		dataType: 'jsonp'
-	}).done(function(ret){
-		console.log('users:', ret)
-		setUsersData(ret)
-		page2 += 1
-	}).fail(function(){
-		console.log('error')
-	}).always(function(ret){
-		isLoadig2 = false
-		$('#users .loading').hide()
-	})
+	if(!isEnding2){
+		if(isLoadig2){
+			return     // 避免多次重复请求
+		} 
+		isLoadig2 = true
+		$('#users .loading').show()
+		$.ajax({
+			url: 'https://api.github.com/search/users?q=followers:>1000+location:china+language:javascript&page='+page2,
+			type: 'GET',
+			data: {
+				page: this.page,
+			},
+			dataType: 'jsonp'
+		}).done(function(ret){
+			console.log('users:', ret)
+			setUsersData(ret)
+			page2 += 1
+		}).fail(function(){
+			console.log('error')
+		}).always(function(ret){
+			isLoadig2 = false
+			$('#users .loading').hide()
+			var arr = ret.data.items
+			if(arr.length === 0){  // 所有数据获取完毕
+				isEnding2 = true
+				$('#users .ending').show()
+			}
+		})
+	}
 }
 function setUsersData(data){
 	var arr = data.data.items
@@ -131,7 +147,7 @@ function setUsersData(data){
         </div> `)
 		$node.find('.cover img').attr('src', item.avatar_url)
     $node.find('a').attr('href', item.html_url)    
-    $node.find('.detail h2').text(item.login) 
+    $node.find('.detail h2').text(item.login)
 		$('#users .container').append($node)
 	})
 }
