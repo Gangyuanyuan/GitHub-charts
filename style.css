@@ -7,22 +7,21 @@ a{
 	text-decoration: none;
 	color: #333;
 }
-/*html,body{
-	height: 100%;
-}*/
+html,body,main{
+    height: 100%;
+    position: relative;
+}
 body{
   font-size: 14px;
   line-height: 1.2;
   background: #fff;
 }
-main{
-  height: calc(100vh - 60px);
-  overflow: scroll;
-  -webkit-overflow-scrolling: touch; /* ios 上增加弹性 */
-}
 main > section{
-	display: none;
+	height: calc(100% - 60px);
 	padding: 10px 12px;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch; /*ios 上增加弹性*/
+    display: none;
 }
 main > section:first-child{
 	display: block;
@@ -109,18 +108,23 @@ section .searchBar button{
 	color: #aaa;
 }
 footer{
-  height: 60px;
-  display: flex;
-  border-top: 1px solid #ccc;
+	height: 60px;
+	width: 100%;
+	display: flex;
+	border-top: 1px solid #ccc;
+	position: absolute;
+	bottom: 0;
 }
 footer > div{
-  flex: 1;
-  text-align: center;
+	flex: 1;
+	text-align: center;
+	color: #666;
+	padding-top: 6px;
 }
 footer .active{
   color: #FF5722;
 }
 footer > div > span{
   display: block;
-  padding-top: 6px;
+  padding-top: 4px;
 }

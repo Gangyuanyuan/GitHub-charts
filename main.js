@@ -3,7 +3,7 @@ $('footer>div').click(function(){
 	var index = $(this).index()
 	$('section').hide().eq(index).fadeIn()
 	$(this).addClass('active').siblings().removeClass('active')
-	// $('main').scrollTop(0) // 切换返回顶部
+	// $('section').scrollTop(0) // 切换返回顶部
 	if(index == 0){
 		if($('#repos .container').html() == ""){
 			startRepos()
@@ -12,8 +12,8 @@ $('footer>div').click(function(){
 		if($('#users .container').html() == ""){
 			startUsers()
 		}
-	}else if(index == 3){
-		// $('main').scrollTop(0)
+	}else if(index == 2){
+		$('#search').scrollTop(0)
 	}
 })
 
@@ -35,37 +35,35 @@ startRepos()
 
 // 滚动加载页面
 var clock
-$('main').scroll(function(){
+$('section').scroll(function(){
 	if(clock){
 		window.clearTimeout(clock) // 定时器节流
 	}
 	clock = setTimeout(function(){
 		if($('footer>div').eq(0).hasClass('active')){
-			if($('#repos').height() -30 <= $('main').height() + $('main').scrollTop()){
+			if($('#repos .container').height() -30 <= $('#repos').height() + $('#repos').scrollTop()){
 				startRepos()
 			}
 		}else if($('footer>div').eq(1).hasClass('active')){
-			if($('#users').height() -30 <= $('main').height() + $('main').scrollTop()){
+		 if($('#users .container').height() -30 <= $('#users').height() + $('#users').scrollTop()){
 				startUsers()
 			}
 		}else if($('footer>div').eq(2).hasClass('active')){
-			if($('#search').height() -30 <= $('main').height() + $('main').scrollTop()){
+		 if($('#search .container').height() -30 <= $('#search').height() + $('#search').scrollTop()){
 				startSearch()
 			}
 		}
 	}, 300)
 })
 
-// 点击按钮搜索
-$('#search button').on('click', function(){
+// 搜索框搜索功能
+$('#search button').on('click', function(){ // 点击按钮搜索
 	$('#search .container').html("")
 	page3 = 1
 	count3 = 0
   startSearch()
 })
-
-// 回车键搜索
-$('#search input').on('keyup', function(e){
+$('#search input').on('keyup', function(e){ // 回车键搜索
   if(e.key === 'Enter') {
   	$('#search .container').html("")
     startSearch()
@@ -210,7 +208,6 @@ function startSearch(){
 			if(arr.length === 0){  // 所有数据获取完毕
 				isEnding3 = true
 				$('#search .ending').show()
-				console.log(1)
 			}
 		})
 	}
