@@ -3,7 +3,7 @@ $('footer>div').click(function(){
 	var index = $(this).index()
 	$('section').hide().eq(index).fadeIn()
 	$(this).addClass('active').siblings().removeClass('active')
-	// $('section').scrollTop(0) // 切换返回顶部
+	$('section').scrollTop(0) // 切换时返回顶部
 	if(index == 0){
 		if($('#repos .container').html() == ""){
 			startRepos()
